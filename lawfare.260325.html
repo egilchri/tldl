@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lawfare</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 24px 16px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+    .date { font-size: 0.85rem; color: #888; margin-bottom: 20px; }
+    .player {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+    #play-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #play-btn:hover { background: #444; }
+    .progress-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #progress { width: 100%; accent-color: #1a1a1a; cursor: pointer; }
+    .times { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; }
+    .speed-controls { display: flex; gap: 6px; margin-bottom: 24px; }
+    .speed-btn {
+      padding: 4px 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      background: #fff;
+      font-size: 0.78rem;
+      cursor: pointer;
+      color: #555;
+    }
+    .speed-btn:hover { background: #f0f0f0; }
+    .speed-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .summary {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 18px 20px;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .summary p { margin-bottom: 1em; }
+    .summary p:last-child { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <h1>Lawfare</h1>
+  <div class="date">2026-03-25 &nbsp;&middot;&nbsp; Summary</div>
+
+  <div class="player">
+    <button id="play-btn">&#9654;</button>
+    <div class="progress-wrap">
+      <input type="range" id="progress" value="0" min="0" step="0.1">
+      <div class="times">
+        <span id="current">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+  </div>
+  <div class="speed-controls">
+    <button class="speed-btn" data-rate="0.75">0.75&times;</button>
+    <button class="speed-btn active" data-rate="1">1&times;</button>
+    <button class="speed-btn" data-rate="1.25">1.25&times;</button>
+    <button class="speed-btn" data-rate="1.5">1.5&times;</button>
+    <button class="speed-btn" data-rate="2">2&times;</button>
+  </div>
+  <audio id="audio" src="lawfare.260325.summary.mp3" preload="metadata"></audio>
+  <div class="summary">
+    <p>Here's a cohesive summary of the podcast:</p>
+    <p>The podcast, hosted by senior editors at Lawfare, covers a wide range of topics related to law, government, and technology. The hosts introduce themselves and discuss various current events and legal issues. The conversation begins with a discussion on eating disorders and the importance of seeking help, specifically mentioning a virtual treatment program called Equip.</p>
+    <p>The hosts then delve into the government's responses to lawsuits related to the AI industry, particularly the Anthropics case, and analyze the potential implications of the government's arguments. They also discuss a grand jury investigation in the Southern District of Florida, which is reportedly looking into allegations of conspiracy and other crimes related to the 2016 election and the Trump administration. The hosts note that over 130 subpoenas have been issued, including one for former FBI director James Comey.</p>
+    <p>Additionally, the hosts discuss a lawsuit filed by two FBI agents who claim they were fired in retaliation for their work on an investigation related to the Trump administration, alleging violations of their First and Fifth Amendment rights. They also touch on a case in New Jersey where a judge threw prosecutors out of his courtroom due to concerns about the handling of a case involving child pornography, as well as a judge's order requiring prosecutors to notify the court when a grand jury declines to indict someone.</p>
+    <p>The conversation also covers various other cases, including a flag burning case, where the hosts note that flag burning is constitutionally protected speech. One of the hosts, Benjamin Wittes, shares his personal experience of being summoned to court for projecting an image on the Washington Monument, which was eventually dropped.</p>
+    <p>The hosts also discuss a case in Fulton County, where mediation has failed, and the case will now go to litigation, involving Tulsi Gabbard's execution of a search warrant for the FBI. They analyze deposition videos of DOGE employees and question who is really in charge of the administration. Other cases mentioned include the government's lawsuit against Harvard University under Title VI of the Civil Rights Act of 1964, Judge Lamberth's ruling on the Voice of America (V.O.A.) case, and several immigration cases, including a case where the government admitted to unlawfully removing over 100 people from the United States.</p>
+    <p>The podcast also touches on federal funding cases, including a district court's decision to block the administration from taking $600 million in public health funds from blue states, and the administration's retaliation against Colorado for not pardoning an election conspiracy theorist by withholding SNAP funding. The hosts also provide an update on the Roger Rodriguez v. Porter case, stating that it is still on track.</p>
+    <p>Throughout the podcast, the hosts provide in-depth analysis and discussion of current events and legal issues, highlighting the intersection of law, government, and technology. The podcast ends with a reminder that the hosts will be back next week to discuss more trials and tribulations.</p>
+  </div>
+  <script>
+
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('play-btn');
+    const progress = document.getElementById('progress');
+    const currentEl = document.getElementById('current');
+    const durationEl = document.getElementById('duration');
+
+    function fmt(s) {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) { audio.play(); } else { audio.pause(); }
+    });
+    audio.addEventListener('play', () => { playBtn.textContent = '⏸'; });
+    audio.addEventListener('pause', () => { playBtn.textContent = '▶'; });
+    audio.addEventListener('ended', () => { playBtn.textContent = '▶'; });
+    audio.addEventListener('loadedmetadata', () => {
+      progress.max = audio.duration;
+      durationEl.textContent = fmt(audio.duration);
+    });
+    audio.addEventListener('timeupdate', () => {
+      progress.value = audio.currentTime;
+      currentEl.textContent = fmt(audio.currentTime);
+    });
+    progress.addEventListener('input', () => { audio.currentTime = progress.value; });
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        audio.playbackRate = parseFloat(btn.dataset.rate);
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
