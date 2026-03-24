@@ -58,6 +58,26 @@
       font-size: 0.75rem;
       color: #888;
     }
+    .speed-controls {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .speed-btn {
+      padding: 4px 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      background: #fff;
+      font-size: 0.78rem;
+      cursor: pointer;
+      color: #555;
+    }
+    .speed-btn:hover { background: #f0f0f0; }
+    .speed-btn.active {
+      background: #1a1a1a;
+      color: #fff;
+      border-color: #1a1a1a;
+    }
     .summary {
       background: #fff;
       border: 1px solid #ddd;
@@ -82,6 +102,13 @@
         <span id="current">0:00</span>
         <span id="duration">0:00</span>
       </div>
+    </div>
+    <div class="speed-controls">
+      <button class="speed-btn" data-rate="0.75">0.75×</button>
+      <button class="speed-btn active" data-rate="1">1×</button>
+      <button class="speed-btn" data-rate="1.25">1.25×</button>
+      <button class="speed-btn" data-rate="1.5">1.5×</button>
+      <button class="speed-btn" data-rate="2">2×</button>
     </div>
   </div>
 
@@ -129,6 +156,14 @@
 
     progress.addEventListener('input', () => {
       audio.currentTime = progress.value;
+    });
+
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        audio.playbackRate = parseFloat(btn.dataset.rate);
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
     });
   </script>
 </body>
