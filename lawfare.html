@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lawfare</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 24px 16px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+    .date { font-size: 0.85rem; color: #888; margin-bottom: 20px; }
+    .player {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+    #play-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #play-btn:hover { background: #444; }
+    .progress-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #progress { width: 100%; accent-color: #1a1a1a; cursor: pointer; }
+    .times { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; }
+    .speed-controls { display: flex; gap: 6px; margin-bottom: 24px; }
+    .speed-btn {
+      padding: 4px 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      background: #fff;
+      font-size: 0.78rem;
+      cursor: pointer;
+      color: #555;
+    }
+    .speed-btn:hover { background: #f0f0f0; }
+    .speed-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .summary {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 18px 20px;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .summary p { margin-bottom: 1em; }
+    .summary p:last-child { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <h1>Lawfare</h1>
+  <div class="date">2026-03-25 &nbsp;&middot;&nbsp; Summary</div>
+
+  <div class="player">
+    <button id="play-btn">&#9654;</button>
+    <div class="progress-wrap">
+      <input type="range" id="progress" value="0" min="0" step="0.1">
+      <div class="times">
+        <span id="current">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+  </div>
+  <div class="speed-controls">
+    <button class="speed-btn" data-rate="0.75">0.75&times;</button>
+    <button class="speed-btn active" data-rate="1">1&times;</button>
+    <button class="speed-btn" data-rate="1.25">1.25&times;</button>
+    <button class="speed-btn" data-rate="1.5">1.5&times;</button>
+    <button class="speed-btn" data-rate="2">2&times;</button>
+  </div>
+  <audio id="audio" src="lawfare.summary.mp3" preload="metadata"></audio>
+  <div class="summary">
+    <p>Here's a cohesive summary of the podcast transcript:</p>
+    <p>The podcast covers a wide range of topics, including eating disorders, the AI industry, government responses to lawsuits, and various court cases. The hosts introduce Equip, a virtual eating disorder treatment program, and discuss the importance of seeking help for eating disorders.</p>
+    <p>The conversation then shifts to the AI industry, specifically the anthropic case, where the government has filed responses to lawsuits in the Northern District of California and the DC Circuit. The hosts analyze the government's arguments, which claim that they can take action through various laws, including the Federal Acquisition Supply Chain Security Act. The hosts also discuss the first amendment claims, which are complex and may not be the strongest grounds for the case.</p>
+    <p>The hosts also discuss several court cases, including a flag-burning case where charges were dropped after it was discovered that there might have been vindictive prosecution. The individual involved was accused of setting fire in a national park, which is a misdemeanor. The discussion includes the legal intricacies of flag burning as protected speech and the specifics of national park regulations.</p>
+    <p>Another case discussed is the one involving Benjamin Wittes, the editor-in-chief of Lawfare, who had a day in court regarding a citation for projecting images on the Washington Monument. The case was part of a larger proceeding that included several individuals with various infractions. Wittes agreed to pay a $100 civil fine and $30 in court costs, and the charges against a co-defendant were dropped.</p>
+    <p>The podcast also touches on other cases, including one in Fulton County involving the execution of a search warrant by the FBI, related to the ballots case, and the DOGE case, where there's an issue about who is in charge. Depositions from DOGE team members indicate confusion about the leadership structure, and there's a discussion about the implications of this structure for the case.</p>
+    <p>Additionally, the hosts discuss the Trump administration's lawsuit against Harvard University under Title VI of the Civil Rights Act of 1964, alleging discrimination, as well as Judge Lamberth's ruling vacating an order that put almost all full-time employees of the Voice of America (V.O.A.) on administrative leave.</p>
+    <p>The hosts also cover several cases involving federal funding, including a First Circuit opinion affirming a preliminary injunction against the federal funding freeze from the beginning of the Trump administration. Another case involves a district court order blocking the administration from taking $600 million in public health funds from blue states, and a preliminary injunction granted to Colorado in a challenge to USDA over SNAP funding.</p>
+    <p>The podcast also mentions other topics, including a grand jury in the Southern District of Florida that has issued over 130 subpoenas, including one to former FBI director James Comey, and various immigration issues, including a quiet week due to a lack of significant developments, but with mention of two cert grants by the Supreme Court related to Temporary Protected Status (TPS) cases.</p>
+    <p>Finally, the podcast concludes with a brief mention of a case involving the Idaho horse fair bulk apprehension and thanks to the guests and engineers for their contributions to the podcast. Overall, the podcast transcript covers a range of topics related to law, government, and technology, with a focus on analysis and discussion of various court cases and legal issues.</p>
+  </div>
+  <script>
+
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('play-btn');
+    const progress = document.getElementById('progress');
+    const currentEl = document.getElementById('current');
+    const durationEl = document.getElementById('duration');
+
+    function fmt(s) {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) { audio.play(); } else { audio.pause(); }
+    });
+    audio.addEventListener('play', () => { playBtn.textContent = '⏸'; });
+    audio.addEventListener('pause', () => { playBtn.textContent = '▶'; });
+    audio.addEventListener('ended', () => { playBtn.textContent = '▶'; });
+    audio.addEventListener('loadedmetadata', () => {
+      progress.max = audio.duration;
+      durationEl.textContent = fmt(audio.duration);
+    });
+    audio.addEventListener('timeupdate', () => {
+      progress.value = audio.currentTime;
+      currentEl.textContent = fmt(audio.currentTime);
+    });
+    progress.addEventListener('input', () => { audio.currentTime = progress.value; });
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        audio.playbackRate = parseFloat(btn.dataset.rate);
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
