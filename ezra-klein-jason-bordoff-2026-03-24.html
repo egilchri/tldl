@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ezra Klein — Jason Bordoff (March 24, 2026)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 24px 16px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+    .date { font-size: 0.85rem; color: #888; margin-bottom: 20px; }
+    .player {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+    }
+    #play-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #play-btn:hover { background: #444; }
+    .progress-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #progress {
+      width: 100%;
+      accent-color: #1a1a1a;
+      cursor: pointer;
+    }
+    .times {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #888;
+    }
+    .summary {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 18px 20px;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .summary p { margin-bottom: 1em; }
+    .summary p:last-child { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <h1>Ezra Klein — Jason Bordoff</h1>
+  <div class="date">March 24, 2026 &nbsp;·&nbsp; Summary</div>
+
+  <div class="player">
+    <button id="play-btn">▶</button>
+    <div class="progress-wrap">
+      <input type="range" id="progress" value="0" min="0" step="0.1">
+      <div class="times">
+        <span id="current">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <p>The podcast explores the intricacies of the global energy market and the ongoing conflict between the US and Iran, which has significant implications for global energy prices, security, and the economy. The conversation begins with the recent threat by President Trump to target Iran's power plants, prompting Iran to threaten destruction of energy infrastructure in the region. This has resulted in the largest energy supply disruption in history, with over 10% of global supply affected, due to the closure of the critical maritime chokepoint, the Strait of Hormuz.</p>
+    <p>The guest, Jason Bordeff, explains that the conflict is asymmetric, with Iran targeting energy infrastructure rather than engaging in direct military confrontation. This has far-reaching consequences, including the potential for rich countries to bid for scarce energy supplies, leaving poorer countries without access to energy and potentially devastating consequences for the global economy.</p>
+    <p>The discussion delves into the concept of "energy as a weapon" and its historical use, citing examples such as Russia cutting off gas supplies to Europe and China restricting rare earth exports. The US's current energy position is also examined, with the dramatic transformation in the last 10–15 years due to the Shale Revolution. However, this growth is beginning to slow down, and the US is now looking to other countries, such as Saudi Arabia, to increase production and alleviate the energy crisis.</p>
+    <p>The conversation critiques the US's energy strategy, which has focused on expanding fossil fuel production and exports rather than investing in clean energy and reducing dependence on foreign oil. In contrast, China is positioning itself as a dominant player in the clean energy sector, with a focus on electrifying its economy and developing domestic energy sources. This could give China a significant advantage in the global energy market.</p>
+    <p>The hosts draw parallels between the current energy crisis and the 1970s oil embargo, noting that the US response to the crisis could have long-term implications for energy policy and global stability. The discussion also touches on the potential consequences of a prolonged conflict in the Middle East, including supply disruptions, price spikes, and long-term damage to energy infrastructure.</p>
+    <p>Ultimately, the conversation highlights the complexities and risks associated with the global energy landscape, emphasizing the need for a more nuanced and sustainable approach to energy policy. The guest recommends several books for further reading, including <em>Material World</em> by Ed Conway, <em>More, More, and More</em> by Jean Baptiste François, and <em>Deliver Me from Nowhere</em> (a book about Bruce Springsteen).</p>
+  </div>
+
+  <audio id="audio" src="ezra-klein-jason-bordoff-2026-03-24.summary.mp3" preload="metadata"></audio>
+
+  <script>
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('play-btn');
+    const progress = document.getElementById('progress');
+    const currentEl = document.getElementById('current');
+    const durationEl = document.getElementById('duration');
+
+    function fmt(s) {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) { audio.play(); } else { audio.pause(); }
+    });
+
+    audio.addEventListener('play', () => { playBtn.textContent = '⏸'; });
+    audio.addEventListener('pause', () => { playBtn.textContent = '▶'; });
+    audio.addEventListener('ended', () => { playBtn.textContent = '▶'; });
+
+    audio.addEventListener('loadedmetadata', () => {
+      progress.max = audio.duration;
+      durationEl.textContent = fmt(audio.duration);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      progress.value = audio.currentTime;
+      currentEl.textContent = fmt(audio.currentTime);
+    });
+
+    progress.addEventListener('input', () => {
+      audio.currentTime = progress.value;
+    });
+  </script>
+</body>
+</html>
