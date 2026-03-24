@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Making Sense</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 24px 16px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+    .date { font-size: 0.85rem; color: #888; margin-bottom: 20px; }
+    .player {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+    #play-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #play-btn:hover { background: #444; }
+    .progress-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #progress { width: 100%; accent-color: #1a1a1a; cursor: pointer; }
+    .times { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; }
+    .speed-controls { display: flex; gap: 6px; margin-bottom: 24px; }
+    .speed-btn {
+      padding: 4px 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      background: #fff;
+      font-size: 0.78rem;
+      cursor: pointer;
+      color: #555;
+    }
+    .speed-btn:hover { background: #f0f0f0; }
+    .speed-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .summary {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 18px 20px;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .summary p { margin-bottom: 1em; }
+    .summary p:last-child { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <h1>Making Sense</h1>
+  <div class="date">2026-03-25 &nbsp;&middot;&nbsp; Summary</div>
+
+  <div class="player">
+    <button id="play-btn">&#9654;</button>
+    <div class="progress-wrap">
+      <input type="range" id="progress" value="0" min="0" step="0.1">
+      <div class="times">
+        <span id="current">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+  </div>
+  <div class="speed-controls">
+    <button class="speed-btn" data-rate="0.75">0.75&times;</button>
+    <button class="speed-btn active" data-rate="1">1&times;</button>
+    <button class="speed-btn" data-rate="1.25">1.25&times;</button>
+    <button class="speed-btn" data-rate="1.5">1.5&times;</button>
+    <button class="speed-btn" data-rate="2">2&times;</button>
+  </div>
+  <audio id="audio" src="sam_harris.summary.mp3" preload="metadata"></audio>
+  <div class="summary">
+    <p>The podcast, hosted by Sam Harris, features a conversation with Nicholas Christakis, a director of the Human Nature Lab at Yale, about the impact of technology on society. Christakis provides a "post-mortem on the present," discussing how information technology has affected us over the last decade, contributing to polarization, mental health crises, and a surveillance state. He shares his personal experience with social media, having become disillusioned with Twitter due to its toxicity and trolling, and now primarily uses Blue Sky, a platform that allows him to engage with scientists and experts in a more meaningful way.</p>
+    <p>The conversation touches on the issue of AI-generated content, which Christakis refers to as "AI Slop," and how it can spread misinformation and fiction. Harris and Christakis discuss potential remedies for the issues caused by social media, including lawsuits, revoking Section 230, and changing social norms around social media use. Christakis highlights the importance of anonymity in contributing to online problems, citing historical examples of how masks and mobs can disinhibit people's behavior.</p>
+    <p>The discussion continues with the topic of anonymity and social media, where Christakis suggests that non-anonymous entities will lead to better behavior and that social media companies should provide options for users to be non-anonymous. The conversation then shifts to Section 230, a law that protects social media companies from being responsible for the content on their platforms. Christakis struggles with the idea of holding companies accountable for the content while also acknowledging the importance of Section 230 in the emergence of the internet.</p>
+    <p>The conversation moves on to the topic of AI and its potential impact on human behavior. Christakis shares a story about the movie Fiddler on the Roof, illustrating the complexity of the AI debate, and decides to focus on the area of human behavior and AI, where he has more expertise. He shares a "toy model" of how AI can change human behavior, using the example of an Alexa digital assistant, suggesting that humans may learn to be rude to machines, which can then translate to rudeness towards other humans.</p>
+    <p>Christakis' lab has been studying human-human interactions in the presence of machines and has found that "dumb AI" can be used to supplement human interaction and improve collective performance. The conversation touches on the potential consequences of interacting with humanoid robots, including the possibility of humans becoming less socially appropriate or even developing psychopathic tendencies. However, Christakis also notes that as robots become more human-like, humans may begin to treat them with more respect and politeness, potentially leading to a resurgence of social graces. The discussion is left unfinished, with the conversation to be continued in part 2, exploring these topics in more depth.</p>
+  </div>
+  <script>
+
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('play-btn');
+    const progress = document.getElementById('progress');
+    const currentEl = document.getElementById('current');
+    const durationEl = document.getElementById('duration');
+
+    function fmt(s) {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) { audio.play(); } else { audio.pause(); }
+    });
+    audio.addEventListener('play', () => { playBtn.textContent = '⏸'; });
+    audio.addEventListener('pause', () => { playBtn.textContent = '▶'; });
+    audio.addEventListener('ended', () => { playBtn.textContent = '▶'; });
+    audio.addEventListener('loadedmetadata', () => {
+      progress.max = audio.duration;
+      durationEl.textContent = fmt(audio.duration);
+    });
+    audio.addEventListener('timeupdate', () => {
+      progress.value = audio.currentTime;
+      currentEl.textContent = fmt(audio.currentTime);
+    });
+    progress.addEventListener('input', () => { audio.currentTime = progress.value; });
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        audio.playbackRate = parseFloat(btn.dataset.rate);
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
