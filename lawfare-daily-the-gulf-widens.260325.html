@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lawfare Daily: The Gulf Widens</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      padding: 24px 16px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+    .date { font-size: 0.85rem; color: #888; margin-bottom: 20px; }
+    .player {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+    #play-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #play-btn:hover { background: #444; }
+    .progress-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #progress { width: 100%; accent-color: #1a1a1a; cursor: pointer; }
+    .times { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; }
+    .speed-controls { display: flex; gap: 6px; margin-bottom: 24px; }
+    .speed-btn {
+      padding: 4px 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      background: #fff;
+      font-size: 0.78rem;
+      cursor: pointer;
+      color: #555;
+    }
+    .speed-btn:hover { background: #f0f0f0; }
+    .speed-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .summary {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 18px 20px;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .summary p { margin-bottom: 1em; }
+    .summary p:last-child { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <h1>Lawfare Daily: The Gulf Widens</h1>
+  <div class="date">2026-03-25 &nbsp;&middot;&nbsp; Summary</div>
+
+  <div class="player">
+    <button id="play-btn">&#9654;</button>
+    <div class="progress-wrap">
+      <input type="range" id="progress" value="0" min="0" step="0.1">
+      <div class="times">
+        <span id="current">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+    </div>
+  </div>
+  <div class="speed-controls">
+    <button class="speed-btn" data-rate="0.75">0.75&times;</button>
+    <button class="speed-btn active" data-rate="1">1&times;</button>
+    <button class="speed-btn" data-rate="1.25">1.25&times;</button>
+    <button class="speed-btn" data-rate="1.5">1.5&times;</button>
+    <button class="speed-btn" data-rate="2">2&times;</button>
+  </div>
+  <audio id="audio" src="lawfare-daily-the-gulf-widens.260325.summary.mp3" preload="metadata"></audio>
+  <div class="summary">
+    <p>Here is a cohesive summary of the podcast:</p>
+    <p>The podcast, "Lawfare," covers a wide range of legal topics, with senior editors discussing various cases and news related to government surveillance, grand juries, FBI lawsuits, and more. The conversation begins with an advertisement for a virtual eating disorder treatment program and introductions from the hosts.</p>
+    <p>The hosts discuss the anthropic case, where the government has responded to lawsuits in the Northern District of California and the DC Circuit, and they find the government's arguments unconvincing. They also mention a hearing scheduled for the 24th with Judge Lynn.</p>
+    <p>Next, they discuss a grand jury in the Southern District of Florida that has issued subpoenas to over 130 people, including former FBI Director James Comey, and speculate about the purpose of the subpoenas and potential targets of the investigation. They also discuss a lawsuit filed by two FBI agents who claim they were fired in retaliation for their work on a case involving Trump, which involves both First Amendment and Fifth Amendment claims.</p>
+    <p>The hosts then cover various cases related to the Trump administration, including a flag-burning suspect where the US Attorney's office in DC dropped the prosecution rather than provide discovery regarding the defendant's claim of prosecutorial vindictiveness. They also discuss a case involving their editor-in-chief, Benjamin Wittes, who was summoned to court for projecting an image on the Washington Monument and ultimately paid a fine and had his property returned.</p>
+    <p>Other cases discussed include a search warrant executed by the FBI in Fulton County, a case involving the administration of the cryptocurrency DOGE, and a lawsuit filed by the government against Harvard University citing anti-Semitism as a reason to cut off funding. The hosts also talk about a case involving the Voice of America (V.O.A.) where a judge vacated an order that put employees on administrative leave and ceased most broadcasting.</p>
+    <p>Additionally, the hosts cover immigration-related cases, including a case involving Temporary Protected Status (TPS) and a case where the government admitted to unlawfully removing over 100 people from the United States. They also discuss cases involving federal funding, including a district court blocking the administration from taking $600 million in public health funds from blue states and a case where Colorado was granted a preliminary injunction in a challenge to USDA over SNAP funding.</p>
+    <p>Throughout the podcast, the hosts provide in-depth analysis and commentary on each topic, often with a critical perspective on the government's actions. They discuss various legal topics, including free speech, cryptocurrency, immigration, and federal funding, and explore the implications of each case on the broader legal landscape.</p>
+  </div>
+  <script>
+
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('play-btn');
+    const progress = document.getElementById('progress');
+    const currentEl = document.getElementById('current');
+    const durationEl = document.getElementById('duration');
+
+    function fmt(s) {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) { audio.play(); } else { audio.pause(); }
+    });
+    audio.addEventListener('play', () => { playBtn.textContent = '⏸'; });
+    audio.addEventListener('pause', () => { playBtn.textContent = '▶'; });
+    audio.addEventListener('ended', () => { playBtn.textContent = '▶'; });
+    audio.addEventListener('loadedmetadata', () => {
+      progress.max = audio.duration;
+      durationEl.textContent = fmt(audio.duration);
+    });
+    audio.addEventListener('timeupdate', () => {
+      progress.value = audio.currentTime;
+      currentEl.textContent = fmt(audio.currentTime);
+    });
+    progress.addEventListener('input', () => { audio.currentTime = progress.value; });
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        audio.playbackRate = parseFloat(btn.dataset.rate);
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
